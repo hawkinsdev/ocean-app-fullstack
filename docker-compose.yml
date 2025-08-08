@@ -2,19 +2,23 @@ version: '3.8'
 
 services:
   frontend:
-    build: ./frontend
+    build: 
+      context: ./oceans-frontend
+      dockerfile: ./Dockerfile
     ports:
       - "3000:3000"
     depends_on:
       - backend
-
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
   backend:
-    build: ./backend
+    build:
+      context: ./oceans-backend
+      dockerfile: ./Dockerfile
     ports:
       - "3001:3001"
     environment:
       - PORT=3001
-      # Para Firebase, monta las credenciales como volumen y variable
       - GOOGLE_APPLICATION_CREDENTIALS=/app/config/firebase-key.json
     volumes:
-      - ./backend/config:/app/config
+      - ./oceans-backend/config:/app/config
