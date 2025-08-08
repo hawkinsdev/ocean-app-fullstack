@@ -19,6 +19,6 @@ services:
       - "3001:3001"
     environment:
       - PORT=3001
-      - GOOGLE_APPLICATION_CREDENTIALS=/app/config/firebase-key.json
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/src/config/firebase-key.json
     volumes:
-      - ./oceans-backend/config:/app/config
+      - ./oceans-backend/src/config:/app/src/config
