@@ -9,7 +9,9 @@
     "test:unit": "jest tests/unit",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/src/index.js",
+    "seed": "ts-node src/scripts/seedUsers.ts",
+    "start:seed": "npm run build && npm run seed && npm run start"
   },
   "keywords": [],
   "author": "",
