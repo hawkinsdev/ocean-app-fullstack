@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginSchemaType } from "../schemas/loginSchema";
 import { useAuth } from "../hooks/useAuth";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const {
@@ -13,15 +14,25 @@ export default function Login() {
     resolver: zodResolver(loginSchema),
   });
 
+  const navigate = useNavigate();
+
   const { login } = useAuth();
 
   const onSubmit = (data: LoginSchemaType) => {
-    login.mutate(data);
+    login.mutate(data, {
+      onSuccess: () => {
+        navigate("/dashboard");
+      },
+      onError: (err) => {
+        console.error("Error en login:", err);
+      },
+    });
   };
 
   return (
     <Container maxWidth="xs">
-      <Box sx={{ mt: 8 }}>
+      <div className="bg-red">asdasd</div>
+      <Box sx={{ mt: 8 }} className="flex justify-center items-center bg-red">
         <Typography variant="h5" align="center">
           Iniciar Sesión
         </Typography>
