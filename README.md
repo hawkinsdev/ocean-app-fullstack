@@ -48,6 +48,9 @@ docker-compose up --build
 # Frontend: http://localhost:3000
 # Backend: http://localhost:3001
 # Swagger API Docs: http://localhost:3001/docs
+# users: 
+### admin: email: admin@oceans.com password: admin123
+### waiter: email: waiter@oceans.com password: waiter123
 
 para detener los contenedores ejecuta
 ```bash
@@ -126,7 +129,7 @@ npm run test:watch
 npm run test:unit
 ```
 
-### Notas finales
+# Notas finales
 
 El archivo firebase-key.json no se incluye en el repositorio por seguridad. Debes generarlo desde tu cuenta de Firebase.
 
