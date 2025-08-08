@@ -1,9 +1,20 @@
 import { db } from '../config/firebase';
 import { Order } from 'src/models/order.model';
+import { getUserByIdRepository } from './user.repository';
 
 export const getOrdersRepository = async (): Promise<Order[]> => {
   const ordersSnapshot = await db.collection('orders').get();
-  const orders = ordersSnapshot.docs.map(doc => doc.data() as Order);
+  const orders = await Promise.all(
+    ordersSnapshot.docs.map(async doc => {
+      const order = doc.data() as Order;
+      const user = await getUserByIdRepository(order.createdBy);
+      return {
+        ...order,
+        id: doc.id,
+        createdBy: user?.username,
+      };
+    })
+  );
   return orders;
 };
 

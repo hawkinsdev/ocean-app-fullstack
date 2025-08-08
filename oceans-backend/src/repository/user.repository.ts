@@ -2,6 +2,12 @@ import { db } from '../config/firebase';
 import { User } from 'src/models/user.model';
 import bcrypt from 'bcrypt';
 
+export const getUserByIdRepository = async (id: string) => {
+  const userDoc = await db.collection('users').doc(id).get();
+  const user = userDoc.data() as User;
+  return user;
+};
+
 export const getUserRepository = async (email: string): Promise<User> => {
   const userSnapshot = await db
     .collection('users')
@@ -22,6 +28,8 @@ export const createUserRepository = async (user: User) => {
 
 export const getUsersRepository = async (): Promise<User[]> => {
   const usersSnapshot = await db.collection('users').get();
-  const users = usersSnapshot.docs.map(doc => doc.data() as User);
+  const users = usersSnapshot.docs.map(
+    doc => ({ ...doc.data(), id: doc.id } as User)
+  );
   return users;
 };
