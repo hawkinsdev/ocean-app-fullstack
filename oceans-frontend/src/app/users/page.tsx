@@ -24,6 +24,8 @@ import PrivateRoute from "@/components/PrivateRoute";
 import { useUsers } from "@/hooks/useUsers";
 import { TUserSchema, userSchema } from "@/schemas/userSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 export type TUser = {
   id: string;
@@ -54,7 +56,17 @@ export default function UsersView() {
   });
 
   const onSubmit = (data: FormInputs) => {
-    addUser.mutate(data);
+    addUser.mutate(data, {
+      onSuccess: () => {
+        toast.success("User created successfully.");
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          const message = error?.response?.data?.message || "Error.";
+          toast.error(message);
+        }
+      },
+    });
     reset();
   };
 

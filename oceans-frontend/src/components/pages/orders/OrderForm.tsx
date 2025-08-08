@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
+import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   Button,
@@ -9,11 +9,10 @@ import {
   Typography,
   Box,
   Stack,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { TProduct } from "@/types/product";
 import { TAddOrder } from "@/types/order";
+import { toast } from "react-toastify";
 
 type TOrderFormProps = {
   products: TProduct[];
@@ -42,9 +41,6 @@ export default function OrderForm({
 
   const selected = watch("selected");
   const quantities = watch("quantities");
-
-  // Estado para mostrar snackbar de error
-  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const total = products.reduce((acc, product) => {
     if (selected?.[product.id] && quantities?.[product.id]) {
@@ -77,8 +73,7 @@ export default function OrderForm({
       }));
 
     if (selectedProducts.length === 0) {
-      // Mostrar snackbar de error
-      setShowSnackbar(true);
+      toast.warning("Debes seleccionar al menos un producto.");
       return;
     }
 
@@ -187,21 +182,6 @@ export default function OrderForm({
       <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
         Cerrar Orden
       </Button>
-
-      <Snackbar
-        open={showSnackbar}
-        autoHideDuration={4000}
-        onClose={() => setShowSnackbar(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
-          onClose={() => setShowSnackbar(false)}
-          severity="warning"
-          sx={{ width: "100%" }}
-        >
-          Debes seleccionar al menos un producto.
-        </Alert>
-      </Snackbar>
     </Box>
   );
 }

@@ -7,6 +7,8 @@ import { loginSchema, type LoginSchemaType } from "@/schemas/loginSchema";
 import { useAuth } from "@/hooks/useAuth";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 export default function Login() {
   const {
@@ -25,8 +27,11 @@ export default function Login() {
       onSuccess: () => {
         router.push("/dashboard");
       },
-      onError: (err) => {
-        console.error("Error en login:", err);
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          const message = error?.response?.data?.message || "Error.";
+          toast.error(message);
+        }
       },
     });
   };

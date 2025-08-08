@@ -6,6 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
 import { ProductFormType, productSchema } from "@/schemas/productSchema";
 import { useProducts } from "@/hooks/useProducts";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 export const ProductForm = () => {
   const {
@@ -21,7 +23,17 @@ export const ProductForm = () => {
   const { addProduct } = useProducts();
 
   const onSubmit = (data: ProductFormType) => {
-    addProduct.mutate(data);
+    addProduct.mutate(data, {
+      onSuccess: () => {
+        toast.success("Product created successfully.");
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          const message = error?.response?.data?.message || "Error.";
+          toast.error(message);
+        }
+      },
+    });
     reset();
   };
 

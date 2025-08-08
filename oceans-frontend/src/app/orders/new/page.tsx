@@ -6,6 +6,8 @@ import { useOrders } from "@/hooks/useOrders";
 import { useProducts } from "@/hooks/useProducts";
 import { TAddOrder } from "@/types/order";
 import { Typography, LinearProgress } from "@mui/material";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export default function Orders() {
   const { addOrder } = useOrders();
@@ -13,7 +15,17 @@ export default function Orders() {
   const authData = useAuthData();
 
   const onSubmit = (data: TAddOrder) => {
-    addOrder.mutate(data);
+    addOrder.mutate(data, {
+      onSuccess: () => {
+        toast.success("Order created successfully.");
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          const message = error?.response?.data?.message || "Error.";
+          toast.error(message);
+        }
+      },
+    });
   };
 
   return (
